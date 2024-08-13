@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .cell {
+            height: 60px;
+            width: 60px;
+            border: 1px solid;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 60px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="question">
+        <p>What is 5 + 5?</p>
+        <input id="answer" type="text">
+        <button onclick="checkAnswer()">Submit</button>
+    </div>
+    <table id="board" style="display: none;">
+    </table>
+    <script>
+        var board = Array(3).fill().map(() => Array(3).fill(''));
+        var currentPlayer = 'X';
+
+        function checkAnswer() {
+            var answer = document.getElementById('answer').value;
+            if (answer == '10') {
+                document.getElementById('question').style.display = 'none';
+                document.getElementById('board').style.display = 'table';
+                drawBoard();
+            } else {
+                alert('Incorrect answer!');
+            }
+        }
+
+        function drawBoard() {
+            var table = document.getElementById('board');
+            for (var i = 0; i < 3; i++) {
+                var row = table.insertRow();
+                for (var j = 0; j < 3; j++) {
+                    var cell = row.insertCell();
+                    cell.innerHTML = board[i][j];
+                    cell.classList.add('cell');
+                    cell.addEventListener('click', (function(i, j) {
+                        return function() {
+                            if (board[i][j] == '') {
+                                board[i][j] = currentPlayer;
+                                currentPlayer = currentPlayer == 'X' ? 'O' : 'X';
+                                drawBoard();
+                            }
+                        }
+                    })(i, j));
+                }
+            }
+        }
+    </script>
+</body>
+</html>
